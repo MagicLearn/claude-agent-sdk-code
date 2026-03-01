@@ -1,1 +1,5 @@
-No code for this lesson. It's a concept lesson — head to [magiclearn.com](https://magiclearn.com) to follow along.
+# What is the Agent SDK?
+
+No code for this lesson.
+
+[View lesson on MagicLearn](https://magiclearn.com/dashboard/courses/claude-agent-sdk/getting-started/what-is-the-agent-sdk)
