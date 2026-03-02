@@ -15,12 +15,8 @@ for await (const message of query({
   prompt: messages(),
   options: {
     model: "claude-sonnet-4-6",
-    systemPrompt: {
-      type: "preset",
-      preset: "claude_code",
-      append:
-        "Always include unit tests with every code example. Use Vitest for the test runner."
-    },
+    systemPrompt:
+      "You are a research assistant. Present multiple perspectives on every topic. Use clear headers and bullet points. Cite specific data points when possible.",
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true
   }
