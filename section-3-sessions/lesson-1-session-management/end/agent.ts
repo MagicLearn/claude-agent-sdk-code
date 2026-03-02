@@ -1,4 +1,4 @@
-import { listSessions, query } from "@anthropic-ai/claude-agent-sdk";
+import { getSessionMessages, listSessions, query } from "@anthropic-ai/claude-agent-sdk";
 
 async function* messages() {
   yield {
@@ -15,6 +15,9 @@ const sessions = await listSessions({ dir: process.cwd(), limit: 1 });
 console.log("sessions", sessions);
 const lastSession = sessions[0];
 console.log("lastSession", lastSession);
+const sessionMessages = await getSessionMessages(lastSession?.sessionId || "");
+console.log("sessionMessages", sessionMessages);
+console.log("sessionMessages count", sessionMessages.length);
 
 const options: any = {
   model: "claude-sonnet-4-6",
