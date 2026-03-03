@@ -1,6 +1,6 @@
 {
   "name": "built-in-tools",
-  "module": "agent.ts",
+  "module": "agent-all-tools.ts",
   "type": "module",
   "private": true,
   "devDependencies": {
