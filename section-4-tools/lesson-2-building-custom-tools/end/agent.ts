@@ -50,9 +50,51 @@ const getWeather = tool(
   }
 )
 
-const weatherServer = createSdkMcpServer({
-  name: "weather",
-  tools: [getWeather]
+const lookupTool = tool(
+  "lookup",
+  "Look up a word in the dictionary",
+  {
+    word: z.string().describe("The word to look up")
+  },
+  async (args) => {
+    try {
+      const response = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${args.word}`
+      )
+
+      if (!response.ok) {
+        return {
+          content: [
+            { type: "text", text: `Dictionary API error: ${response.status}` }
+          ],
+          isError: true
+        }
+      }
+
+      const data = await response.json()
+      const definition =
+        data[0]?.meanings[0]?.definitions[0]?.definition ?? "Not found"
+
+      return {
+        content: [{ type: "text", text: definition }]
+      }
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Failed to look up word: ${(error as Error).message}`
+          }
+        ],
+        isError: true
+      }
+    }
+  }
+)
+
+const server = createSdkMcpServer({
+  name: "reference",
+  tools: [getWeather, lookupTool]
 })
 
 async function* messages() {
@@ -60,7 +102,8 @@ async function* messages() {
     type: "user" as const,
     message: {
       role: "user" as const,
-      content: "What's the weather in San Francisco?"
+      content:
+        "What's the weather in San Francisco? Also, what does 'ephemeral' mean?"
     }
   }
 }
@@ -70,7 +113,7 @@ for await (const message of query({
   options: {
     model: "claude-sonnet-4-6",
     mcpServers: {
-      weather: weatherServer
+      reference: server
     },
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true
