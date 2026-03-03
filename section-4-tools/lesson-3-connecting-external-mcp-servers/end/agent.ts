@@ -18,7 +18,7 @@ for await (const message of query({
     mcpServers: {
       playwright: {
         command: "npx",
-        args: ["@playwright/mcp@latest", "--headless"]
+        args: ["@playwright/mcp@latest"]
       }
     },
     permissionMode: "bypassPermissions",
