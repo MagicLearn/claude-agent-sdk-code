@@ -19,7 +19,7 @@ for await (const message of query({
       preset: "claude_code"
     },
     settingSources: ["project"],
-    allowedTools: ["Read", "Glob"],
+    tools: ["Read", "Glob"],
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true
   }

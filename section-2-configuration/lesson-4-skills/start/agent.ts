@@ -15,7 +15,7 @@ for await (const message of query({
   prompt: messages(),
   options: {
     model: "claude-sonnet-4-6",
-    allowedTools: ["Read", "Write"],
+    tools: ["Read", "Write"],
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true
   }

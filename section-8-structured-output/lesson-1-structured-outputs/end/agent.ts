@@ -27,7 +27,7 @@ for await (const message of query({
     model: "claude-sonnet-4-6",
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true,
-    allowedTools: ["WebSearch", "WebFetch"],
+    tools: ["WebSearch", "WebFetch"],
     outputFormat: {
       type: "json_schema",
       schema: z.toJSONSchema(CompanyInfo)

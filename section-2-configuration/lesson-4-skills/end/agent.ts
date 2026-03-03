@@ -16,7 +16,7 @@ for await (const message of query({
   options: {
     model: "claude-sonnet-4-6",
     settingSources: ["project"],
-    allowedTools: ["Skill", "Read", "Write"],
+    tools: ["Skill", "Read", "Write"],
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true
   }

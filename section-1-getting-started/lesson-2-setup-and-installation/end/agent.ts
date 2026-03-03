@@ -4,7 +4,7 @@ for await (const message of query({
   prompt: "Create a file called hello.txt with a short haiku about coding",
   options: {
     model: "claude-sonnet-4-6",
-    allowedTools: ["Write"],
+    tools: ["Write"],
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true
   }

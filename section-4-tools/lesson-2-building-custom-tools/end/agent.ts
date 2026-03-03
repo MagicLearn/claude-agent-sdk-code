@@ -72,7 +72,6 @@ for await (const message of query({
     mcpServers: {
       weather: weatherServer
     },
-    allowedTools: ["mcp__weather__get_weather"],
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true
   }

@@ -14,7 +14,7 @@ for await (const message of query({
   prompt: messages(),
   options: {
     model: "claude-haiku-4-5",
-    allowedTools: ["Read", "Write", "Glob"],
+    tools: ["Read", "Write", "Glob"],
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true
   }

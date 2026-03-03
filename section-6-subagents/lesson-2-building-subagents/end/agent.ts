@@ -15,7 +15,7 @@ for await (const message of query({
   prompt: messages(),
   options: {
     model: "claude-sonnet-4-6",
-    allowedTools: [
+    tools: [
       "Read",
       "Write",
       "Glob",

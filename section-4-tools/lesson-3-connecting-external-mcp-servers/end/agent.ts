@@ -21,7 +21,6 @@ for await (const message of query({
         args: ["@playwright/mcp@latest", "--headless"]
       }
     },
-    allowedTools: ["mcp__playwright__*"],
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true
   }
