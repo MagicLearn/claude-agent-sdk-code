@@ -2,8 +2,8 @@ import { query } from "@anthropic-ai/claude-agent-sdk";
 
 // ANSI colors for subagent output
 const colors: Record<string, string> = {
-  "product-manager": "\x1b[36m", // cyan
-  engineer: "\x1b[33m" // yellow
+  planner: "\x1b[36m", // cyan
+  writer: "\x1b[33m" // yellow
 };
 const dim = "\x1b[2m";
 const reset = "\x1b[0m";
@@ -13,7 +13,7 @@ async function* messages() {
     type: "user" as const,
     message: {
       role: "user" as const,
-      content: "Create a project brief for a new mobile app, then write the technical specification based on that brief"
+      content: "Plan a weekend camping trip to Yosemite, then write a packing list based on that plan. Keep both short. Save all files in the current directory."
     }
   };
 }
@@ -29,22 +29,21 @@ for await (const message of query({
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true,
     agents: {
-      "product-manager": {
-        description: "Product manager. Use for creating project briefs, requirements, and product plans.",
-        prompt: "You are a product manager. Create clear, actionable project briefs with goals, target audience, key features, and success metrics. Save the brief to ./brief.md in the current directory.",
+      planner: {
+        description: "Trip planner. Use for creating travel plans, itineraries, and activity schedules.",
+        prompt: "You are a trip planner. Create a short, practical trip plan. Save it to ./plan.md in the current directory. Keep it concise — a few paragraphs max.",
         tools: ["Read", "Write"],
         model: "sonnet"
       },
-      engineer: {
-        description: "Engineer. Use for writing technical specifications and implementation plans based on existing documents.",
-        prompt: "You are a software engineer. Read ./brief.md and write a detailed technical specification covering architecture, data models, API endpoints, and implementation plan. Save the spec to ./spec.md in the current directory.",
+      writer: {
+        description: "Writer. Use for creating documents based on existing plans or research.",
+        prompt: "You are a writer. Read ./plan.md and create a packing list based on the trip plan. Save it to ./packing-list.md in the current directory. Keep it concise.",
         tools: ["Read", "Write"],
         model: "haiku"
       }
     }
   }
 })) {
-  console.log(JSON.stringify(message, null, 2));
   if (message.type === "assistant") {
     const subagentId = message.parent_tool_use_id;
     const subagentName = subagentId ? subagentMap.get(subagentId) : null;

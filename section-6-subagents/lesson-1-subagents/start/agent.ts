@@ -6,7 +6,7 @@ async function* messages() {
     message: {
       role: "user" as const,
       content:
-        "Create a project brief for a new mobile app, then write the technical specification based on that brief"
+        "Plan a weekend camping trip to Yosemite, then write a packing list based on that plan. Keep both short. Save all files in the current directory."
     }
   }
 }
