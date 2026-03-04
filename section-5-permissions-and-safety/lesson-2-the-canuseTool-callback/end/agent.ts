@@ -1,4 +1,4 @@
-import { query } from "@anthropic-ai/claude-agent-sdk"
+import { query } from "@anthropic-ai/claude-agent-sdk";
 
 async function* messages() {
   yield {
@@ -6,9 +6,9 @@ async function* messages() {
     message: {
       role: "user" as const,
       content:
-        "Create a file called notes.txt with a summary of today's tasks, then list all files in the current directory"
+        "Research the best coffee brewing methods and save a guide to coffee-guide.md"
     }
-  }
+  };
 }
 
 for await (const message of query({
@@ -16,23 +16,40 @@ for await (const message of query({
   options: {
     model: "claude-sonnet-4-6",
     canUseTool: async (toolName, input) => {
-      console.log(`[Permission] ${toolName}:`, JSON.stringify(input))
+      console.log(`\n[canUseTool] ${toolName}:`, JSON.stringify(input));
 
-      // Block any Bash command that contains "rm"
-      if (toolName === "Bash" && String(input.command).includes("rm")) {
+      // Block all web access — agent must use its own knowledge
+      if (toolName === "WebSearch" || toolName === "WebFetch") {
+        console.log(`[DENIED] ${toolName} — web access blocked`);
         return {
           behavior: "deny",
-          message: "Deleting files is not allowed. Try a different approach."
-        }
+          message:
+            "Web access is not available. Use your own knowledge instead."
+        };
       }
 
-      return { behavior: "allow", updatedInput: input }
+      // Rename the output file
+      if (toolName === "Write") {
+        console.log(
+          `[MODIFIED] Write — renamed ${input.file_path} → barista-guide.md`
+        );
+        return {
+          behavior: "allow",
+          updatedInput: {
+            ...input,
+            file_path: "barista-guide.md"
+          }
+        };
+      }
+
+      console.log(`[ALLOWED] ${toolName}`);
+      return { behavior: "allow", updatedInput: input };
     }
   }
 })) {
   if (message.type === "assistant") {
     for (const block of message.message.content) {
-      if ("text" in block) console.log(block.text)
+      if ("text" in block) console.log(block.text);
     }
   }
 }
