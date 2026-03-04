@@ -31,13 +31,13 @@ for await (const message of query({
     agents: {
       planner: {
         description: "Trip planner. Use for creating travel plans, itineraries, and activity schedules.",
-        prompt: "You are a trip planner. Create a short, practical trip plan. Save it to ./plan.md in the current directory. Keep it concise — a few paragraphs max.",
+        prompt: "You are a trip planner. Create a short, practical trip plan and save it to a file. Keep it concise — a few paragraphs max.",
         tools: ["Read", "Write"],
         model: "sonnet"
       },
       writer: {
         description: "Writer. Use for creating documents based on existing plans or research.",
-        prompt: "You are a writer. Read ./plan.md and create a packing list based on the trip plan. Save it to ./packing-list.md in the current directory. Keep it concise.",
+        prompt: "You are a writer. Read the trip plan and create a packing list based on it. Save it to a file. Keep it concise.",
         tools: ["Read", "Write"],
         model: "haiku"
       }
