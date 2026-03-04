@@ -25,25 +25,26 @@ for await (const message of query({
   prompt: messages(),
   options: {
     model: "claude-sonnet-4-6",
-    tools: ["Read", "Write", "Task"],
+    tools: ["Read", "Write", "Agent"],
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true,
     agents: {
       "product-manager": {
         description: "Product manager. Use for creating project briefs, requirements, and product plans.",
-        prompt: "You are a product manager. Create clear, actionable project briefs with goals, target audience, key features, and success metrics. Save the brief to brief.md.",
+        prompt: "You are a product manager. Create clear, actionable project briefs with goals, target audience, key features, and success metrics. Save the brief to ./brief.md in the current directory.",
         tools: ["Read", "Write"],
         model: "sonnet"
       },
       engineer: {
         description: "Engineer. Use for writing technical specifications and implementation plans based on existing documents.",
-        prompt: "You are a software engineer. Read the project brief and write a detailed technical specification covering architecture, data models, API endpoints, and implementation plan. Save the spec to spec.md.",
+        prompt: "You are a software engineer. Read ./brief.md and write a detailed technical specification covering architecture, data models, API endpoints, and implementation plan. Save the spec to ./spec.md in the current directory.",
         tools: ["Read", "Write"],
         model: "haiku"
       }
     }
   }
 })) {
+  console.log(JSON.stringify(message, null, 2));
   if (message.type === "assistant") {
     const subagentId = message.parent_tool_use_id;
     const subagentName = subagentId ? subagentMap.get(subagentId) : null;
@@ -51,8 +52,8 @@ for await (const message of query({
     const prefix = subagentName ? `${color}[${subagentName}]${reset} ` : "";
 
     for (const block of message.message.content) {
-      // Track Task tool calls to map subagent IDs
-      if ("type" in block && block.type === "tool_use" && block.name === "Task") {
+      // Track Agent tool calls to map subagent IDs
+      if ("type" in block && block.type === "tool_use" && block.name === "Agent") {
         const agentType = (block.input as Record<string, string>).subagent_type;
         subagentMap.set(block.id, agentType);
         const agentColor = colors[agentType] ?? "";
@@ -60,7 +61,7 @@ for await (const message of query({
       }
 
       // Log tool calls from subagents
-      if ("type" in block && block.type === "tool_use" && block.name !== "Task" && subagentName) {
+      if ("type" in block && block.type === "tool_use" && block.name !== "Agent" && subagentName) {
         const input = block.input as Record<string, string>;
         const target = input.file_path ?? "";
         console.log(`${prefix}${dim}Tool: ${block.name}${target ? ` → ${target}` : ""}${reset}`);
