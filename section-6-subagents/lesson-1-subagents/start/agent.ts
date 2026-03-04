@@ -6,7 +6,7 @@ async function* messages() {
     message: {
       role: "user" as const,
       content:
-        "Plan a product launch for a new mobile app — create a timeline document, draft an announcement post, and outline a marketing strategy"
+        "Create a project brief for a new mobile app, then write the technical specification based on that brief"
     }
   }
 }
