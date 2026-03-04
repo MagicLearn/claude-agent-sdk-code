@@ -11,11 +11,12 @@ async function* messages() {
   }
 }
 
+// acceptEdits: Write auto-approves, WebSearch still needs approval
 for await (const message of query({
   prompt: messages(),
   options: {
     model: "claude-sonnet-4-6",
-    permissionMode: "default"
+    permissionMode: "acceptEdits"
   }
 })) {
   if (message.type === "assistant") {

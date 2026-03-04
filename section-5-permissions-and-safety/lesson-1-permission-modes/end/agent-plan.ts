@@ -6,18 +6,17 @@ async function* messages() {
     message: {
       role: "user" as const,
       content:
-        "Find all TypeScript files in this project and summarize what each one does"
+        "Research NVIDIA's latest earnings report and save a brief summary to earnings.md"
     }
   }
 }
 
+// plan: the agent thinks and plans, but no tools execute
 for await (const message of query({
   prompt: messages(),
   options: {
     model: "claude-sonnet-4-6",
-    tools: ["Read", "Glob", "Grep"],
-    permissionMode: "bypassPermissions",
-    allowDangerouslySkipPermissions: true
+    permissionMode: "plan"
   }
 })) {
   if (message.type === "assistant") {

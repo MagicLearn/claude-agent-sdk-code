@@ -11,11 +11,14 @@ async function* messages() {
   }
 }
 
+// bypassPermissions + tools: everything auto-approves, but only WebSearch and Write are available
 for await (const message of query({
   prompt: messages(),
   options: {
     model: "claude-sonnet-4-6",
-    permissionMode: "default"
+    tools: ["WebSearch", "Write"],
+    permissionMode: "bypassPermissions",
+    allowDangerouslySkipPermissions: true
   }
 })) {
   if (message.type === "assistant") {
