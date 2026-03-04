@@ -1,5 +1,5 @@
 {
-  "name": "building-subagents",
+  "name": "subagents",
   "module": "agent.ts",
   "type": "module",
   "private": true,
