@@ -5,8 +5,7 @@ async function* messages() {
     type: "user" as const,
     message: {
       role: "user" as const,
-      content:
-        "Research the files in this project and explain the overall structure"
+      content: "What do you know about me?"
     }
   }
 }
