@@ -1,5 +1,5 @@
-import { z } from "zod"
-import { query } from "@anthropic-ai/claude-agent-sdk"
+import { query } from "@anthropic-ai/claude-agent-sdk";
+import { z } from "zod";
 
 const CompanyInfo = z.object({
   company_name: z.string(),
@@ -7,9 +7,9 @@ const CompanyInfo = z.object({
   headquarters: z.string(),
   key_products: z.array(z.string()),
   description: z.string()
-})
+});
 
-type CompanyInfo = z.infer<typeof CompanyInfo>
+type CompanyInfo = z.infer<typeof CompanyInfo>;
 
 async function* messages() {
   yield {
@@ -18,7 +18,7 @@ async function* messages() {
       role: "user" as const,
       content: "Research Anthropic and provide key company information"
     }
-  }
+  };
 }
 
 for await (const message of query({
@@ -30,27 +30,25 @@ for await (const message of query({
     tools: ["WebSearch", "WebFetch"],
     outputFormat: {
       type: "json_schema",
-      schema: z.toJSONSchema(CompanyInfo)
+      schema: z.toJSONSchema(CompanyInfo, { target: "draft-07" })
     }
   }
 })) {
   if (message.type === "result" && message.subtype === "success") {
-    const parsed = CompanyInfo.safeParse(message.structured_output)
+    const parsed = CompanyInfo.safeParse(message.structured_output);
 
     if (parsed.success) {
-      const info: CompanyInfo = parsed.data
-      console.log(`Company: ${info.company_name}`)
-      console.log(`Founded: ${info.founded_year}`)
-      console.log(`HQ: ${info.headquarters}`)
-      console.log(`Products: ${info.key_products.join(", ")}`)
-      console.log(`About: ${info.description}`)
+      const info: CompanyInfo = parsed.data;
+      console.log(info);
+      console.log(`Company: ${info.company_name}`);
+      console.log(`Founded: ${info.founded_year}`);
+      console.log(`HQ: ${info.headquarters}`);
+      console.log(`Products: ${info.key_products.join(", ")}`);
+      console.log(`About: ${info.description}`);
     } else {
-      console.error("Failed to parse output:", parsed.error)
+      console.error("Failed to parse output:", parsed.error);
     }
-  } else if (
-    message.type === "result" &&
-    message.subtype === "error_max_structured_output_retries"
-  ) {
-    console.error("Could not produce valid output after retries")
+  } else if (message.type === "result" && message.subtype === "error_max_structured_output_retries") {
+    console.error("Could not produce valid output after retries");
   }
 }
