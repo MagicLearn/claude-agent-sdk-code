@@ -5,7 +5,7 @@ async function* messages() {
     type: "user" as const,
     message: {
       role: "user" as const,
-      content: "Clean up all the temporary files in this project"
+      content: "Read agent.ts and add a comment at the top explaining what it does"
     }
   }
 }
