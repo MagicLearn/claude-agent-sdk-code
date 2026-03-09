@@ -38,7 +38,7 @@ app.event("app_mention", async ({ event, say }) => {
 })
 
 app.event("message", async ({ event, say }) => {
-  if (event.channel_type !== "im" || event.subtype === "bot_message") return
+  if (event.channel_type !== "im" || event.subtype || event.bot_id) return
 
   const threadTs = event.thread_ts ?? event.ts
 
